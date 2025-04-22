@@ -1,1 +1,1 @@
-# STM32F407_Kickstart
+# STM32F051 DISCO Kickstart
