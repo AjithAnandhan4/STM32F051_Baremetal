@@ -1,9 +1,13 @@
-int add(int a, int b) {
-    return a + b;
-}
+#include <stdio.h>
 
-int main(void) {
-    int result = add(5, 7);
-    while (1); // halt here
-    return result;
+int g_var = 1234;
+
+int main(void)
+{
+  int a = 10;
+  while(1)
+  {
+	  /*Do nothing*/
+  }
+  return 0;
 }

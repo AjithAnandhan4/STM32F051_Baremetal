@@ -1,18 +1,25 @@
-# Target
-all: build.elf
+CC = arm-none-eabi-gcc
+CFLAGS = -mcpu=cortex-m0 -mthumb -c -g
+LFLAGS = -mcpu=cortex-m0 -nostdlib -mthumb -Wl,-Map=main.map -T main.ld
+all : startup.o main.o
+	$(CC) $(LFLAGS) -o main.elf main.o startup.o 
 
-# Link the object files into an ELF executable
-build.elf: startup.o main.o
-	arm-none-eabi-ld -T linker.ld -nostdlib -Map=build.map -o build.elf startup.o main.o
+startup : startup.c
+	$(CC) $(CFLAGS) startup.c
 
-# Compile C source into object file
-main.o: main.c
-	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -g -c main.c -o main.o
-
-# Assemble startup code
-startup.o: startup.s
-	arm-none-eabi-as -mcpu=cortex-m3 -g -o startup.o startup.s
-
-# Clean build artifacts
+main : main.c
+	$(CC) $(CFLAGS) main.c
+	
 clean:
 	rm -f *.o *.elf *.map
+	#del /Q *.o *.elf *.map
+flash: 
+	openocd -f interface/stlink.cfg -f target/stm32f0x.cfg -c "program main.elf verify reset exit"
+
+debug:
+	openocd -f interface/stlink.cfg -f target/stm32f0x.cfg
+
+gdb:
+	arm-none-eabi-gdb main.elf
+	
+
